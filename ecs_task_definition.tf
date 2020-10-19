@@ -13,6 +13,38 @@ locals {
       ],
       "essential" : true,
       "image" : "lacework/datacollector",
+      "mountPoints" : [
+        {
+          "readOnly" : true,
+          "containerPath" : "/laceworkfim",
+          "sourceVolume" : "root"
+        },
+        {
+          "readOnly" : null,
+          "containerPath" : "/var/lib/lacework",
+          "sourceVolume" : "var_lib_lacework"
+        },
+        {
+          "readOnly" : null,
+          "containerPath" : "/var/log",
+          "sourceVolume" : "var_log"
+        },
+        {
+          "readOnly" : null,
+          "containerPath" : "/var/run",
+          "sourceVolume" : "var_run"
+        },
+        {
+          "readOnly" : true,
+          "containerPath" : "/etc/passwd",
+          "sourceVolume" : "etc_passwd"
+        },
+        {
+          "readOnly" : true,
+          "containerPath" : "/etc/group",
+          "sourceVolume" : "etc_group"
+        }
+      ],
       "name" : var.ecs_task_family,
       "privileged" : true
     }
@@ -32,4 +64,37 @@ resource "aws_ecs_task_definition" "lacework_datacollector" {
 
   task_role_arn      = data.aws_iam_role.ecs_task_role.arn
   execution_role_arn = data.aws_iam_role.ecs_task_role.arn
+
+  network_mode = "host"
+  pid_mode     = "host"
+
+  volume {
+    name      = "root"
+    host_path = "/"
+  }
+
+  volume {
+    name      = "var_lib_lacework"
+    host_path = "/var/lib/lacework"
+  }
+
+  volume {
+    name      = "var_log"
+    host_path = "/var/log"
+  }
+
+  volume {
+    name      = "var_run"
+    host_path = "/var/run"
+  }
+
+  volume {
+    name      = "etc_passwd"
+    host_path = "/etc/passwd"
+  }
+
+  volume {
+    name      = "etc_group"
+    host_path = "/etc/group"
+  }
 }
