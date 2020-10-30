@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.aws_region
-}
-
 locals {
   container_definition_json = jsonencode([
     {

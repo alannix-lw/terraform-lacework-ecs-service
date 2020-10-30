@@ -1,6 +1,9 @@
 variable "aws_region" {
   default = "us-east-1"
 }
+variable "aws_profile" {
+  default = "default"
+}
 variable "ecs_cluster_name" {}
 variable "ecs_service_name" {
   default = "lacework-datacollector"
